@@ -1,16 +1,16 @@
 function operate(operator, a, b) {
     let result;
     switch (operator) {
-        case "+":
+        case "add":
             result = add(a, b);
             break;
-        case "-":
+        case "subtract":
             result = subtract(a, b);
             break;
-        case "*":
+        case "multiply":
             result = multiply(a, b);
             break;
-        case "/":
+        case "divide":
             result = divide(a, b);
             break;
     }
@@ -38,9 +38,25 @@ const calculator = document.querySelector("#calculator");
 const display = calculator.querySelector("#display-digits");
 let displayValue = "";
 
-const numberBtns = Array.from(document.querySelectorAll("button.num"));
+const numberBtns = Array.from(calculator.querySelectorAll("#num-pad button.num"));
 numberBtns.forEach(btn => btn.addEventListener("click", (e) => {
-    console.log(e.target.textContent);
     displayValue += e.target.textContent;
     display.textContent = displayValue;
 }));
+
+let firstOperand, secondOperand, operatorSymbol;
+let operator;
+const operatorBtns = Array.from(calculator.querySelectorAll("#operators button.operate"));
+operatorBtns.forEach(btn => btn.addEventListener("click", (e) => {
+    firstOperand = parseInt(displayValue);
+    operatorSymbol = e.target.textContent;
+    displayValue += operatorSymbol;
+    operator = e.target.id;
+}));
+
+const equalsBtn = calculator.querySelector("#num-pad button#equals");
+equalsBtn.addEventListener("click", (e) => {
+    secondOperand = displayValue.replace(firstOperand + operatorSymbol, "");
+    let result = operate(operator, firstOperand, secondOperand);
+    console.log(result);
+});
