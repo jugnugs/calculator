@@ -33,3 +33,14 @@ function multiply(a, b) {
 function divide(a, b) {
     return a / b;
 }
+
+const calculator = document.querySelector("#calculator");
+const display = calculator.querySelector("#display-digits");
+let displayValue = "";
+
+const numberBtns = Array.from(document.querySelectorAll("button.num"));
+numberBtns.forEach(btn => btn.addEventListener("click", (e) => {
+    console.log(e.target.textContent);
+    displayValue += e.target.textContent;
+    display.textContent = displayValue;
+}));
