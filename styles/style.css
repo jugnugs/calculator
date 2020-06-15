@@ -58,6 +58,6 @@ body {
     font-size: 40px;
 }
 
-.operate {
+#operators .button {
     flex-grow: 1;
 }
