@@ -34,21 +34,14 @@ function divide(a, b) {
     return a / b;
 }
 
-function onNumClick(e) {
-    displayValue += e.target.textContent;
-    updateDisplay(displayValue);
+function clearData(display) {
+    displayValue = display;
+    currentNums = [];
+    currentOperations = [];
 }
 
-function onOperatorClick(e) {
-    let operand = displayValue;
-    if (currentOperations.length > 0) {
-        let lastOperationIndex = displayValue.indexOf(currentOperations[currentOperations.length - 1]);
-        operand = displayValue.slice(lastOperationIndex + 1);
-    }
-    currentNums.push(parseInt(operand));
-    currentOperations.push(e.target.textContent);
-    displayValue += e.target.textContent;
-    updateDisplay(displayValue);
+function updateDisplay(newDisplay) {
+    display.textContent = newDisplay;
 }
 
 // check for multiplication/division operators
@@ -61,20 +54,41 @@ function checkAS(operator) {
     return operator === "+" || operator === "-";
 }
 
-function onEqualsClick(e) {
-    // get the last operand
+function pushLastOperand() {
     let lastOperationIndex = displayValue.indexOf(currentOperations[currentOperations.length - 1]);
-    let lastOperand = parseInt(displayValue.slice(lastOperationIndex + 1));
+    let lastOperand = parseFloat(displayValue.slice(lastOperationIndex + 1));
     currentNums.push(lastOperand);
+}
 
+function onNumClick(e) {
+    displayValue += e.target.textContent;
+    updateDisplay(displayValue);
+}
+
+function onOperatorClick(e) {
+    let operand = displayValue;
+    // return if user tries to enter operator first
+    if (operand === "") {
+        return;
+    } else if (currentOperations.length > 0) {
+        pushLastOperand();
+    } else {
+        currentNums.push(parseFloat(operand));
+    }
+    currentOperations.push(e.target.textContent);
+    displayValue += e.target.textContent;
+    updateDisplay(displayValue);
+}
+
+function onEqualsClick(e) {
+    pushLastOperand();
     // check to make sure all numbers/operators are
     // entered
-    if (isNaN(lastOperand)) {
+    if (isNaN(currentNums[currentNums.length - 1]) || 
+    currentOperations.length == 0) {
         currentNums.pop();
         return;
-    } else if (currentOperations.length == 0) {
-        return;
-    }
+    } 
     
     // execute operations in PEMDAS order
     let numOperations = currentOperations.length;
@@ -95,7 +109,7 @@ function onEqualsClick(e) {
             return;
         }
         result = operate(operator, currentNums[index], currentNums[index + 1]);
-        let roundToPlaces = 1000000000;
+        const roundToPlaces = 1000000000;
         displayValue = Math.round((result + Number.EPSILON) * roundToPlaces) / roundToPlaces;
         updateDisplay(displayValue);
         currentNums.splice(index, 2, result);
@@ -109,21 +123,12 @@ function onClearClick(e) {
     updateDisplay("0");
 }
 
-function clearData(display) {
-    displayValue = display;
-    currentNums = [];
-    currentOperations = [];
-}
-
-function updateDisplay(newDisplay) {
-    display.textContent = newDisplay;
-}
-
-const calculator = document.querySelector("#calculator");
-const display = calculator.querySelector("#display-digits");
 let currentNums = [];
 let currentOperations = [];
 let displayValue = "";
+
+const calculator = document.querySelector("#calculator");
+const display = calculator.querySelector("#display-digits");
 
 const numberBtns = Array.from(calculator.querySelectorAll("#num-pad button.num"));
 numberBtns.forEach(btn => btn.addEventListener("click", onNumClick));
