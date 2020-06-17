@@ -66,6 +66,15 @@ function onEqualsClick(e) {
     let lastOperationIndex = displayValue.indexOf(currentOperations[currentOperations.length - 1]);
     let lastOperand = parseInt(displayValue.slice(lastOperationIndex + 1));
     currentNums.push(lastOperand);
+
+    // check to make sure all numbers/operators are
+    // entered
+    if (isNaN(lastOperand)) {
+        currentNums.pop();
+        return;
+    } else if (currentOperations.length == 0) {
+        return;
+    }
     
     // execute operations in PEMDAS order
     let numOperations = currentOperations.length;
@@ -78,11 +87,32 @@ function onEqualsClick(e) {
             operator = currentOperations.find(checkAS);
             index = currentOperations.findIndex(checkAS);
         }
+
+        // check if dividing by 0
+        if (operator === "÷" && currentNums[index + 1] === 0) {
+            clearData("");
+            updateDisplay("DON'T TRY");
+            return;
+        }
         result = operate(operator, currentNums[index], currentNums[index + 1]);
-        updateDisplay(result);
+        let roundToPlaces = 1000000000;
+        displayValue = Math.round((result + Number.EPSILON) * roundToPlaces) / roundToPlaces;
+        updateDisplay(displayValue);
         currentNums.splice(index, 2, result);
         currentOperations.splice(index, 1);
     }
+    clearData(displayValue);
+}
+
+function onClearClick(e) {
+    clearData("");
+    updateDisplay("0");
+}
+
+function clearData(display) {
+    displayValue = display;
+    currentNums = [];
+    currentOperations = [];
 }
 
 function updateDisplay(newDisplay) {
@@ -98,10 +128,11 @@ let displayValue = "";
 const numberBtns = Array.from(calculator.querySelectorAll("#num-pad button.num"));
 numberBtns.forEach(btn => btn.addEventListener("click", onNumClick));
 
-let firstOperand, secondOperand;
-let operator;
 const operatorBtns = Array.from(calculator.querySelectorAll("#operators button.operate"));
 operatorBtns.forEach(btn => btn.addEventListener("click", onOperatorClick));
 
 const equalsBtn = calculator.querySelector("#num-pad button#equals");
 equalsBtn.addEventListener("click", onEqualsClick);
+
+const clearBtn = calculator.querySelector("#operators button#clear");
+clearBtn.addEventListener("click", onClearClick);
