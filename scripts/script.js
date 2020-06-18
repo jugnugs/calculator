@@ -76,16 +76,22 @@ function onOperatorClick(e) {
     }
 }
 
+function onDecimalClick(e) {
+    if (expectNewNum || displayValue.includes(".")) return;
+    displayValue += e.target.textContent;
+    updateDisplay(displayValue);
+}
+
 function onEqualsClick(e) {
     pushOperand(displayValue);
     // check to make sure all numbers/operators are
     // entered
-    if (isNaN(currentNums[currentNums.length - 1]) || 
-    currentOperations.length == 0) {
+    if (isNaN(currentNums[currentNums.length - 1]) ||
+        currentOperations.length == 0) {
         currentNums.pop();
         return;
-    } 
-    
+    }
+
     // execute operations in PEMDAS order
     let numOperations = currentOperations.length;
     for (let i = 0; i < numOperations; i++) {
@@ -106,7 +112,7 @@ function onEqualsClick(e) {
         }
         result = operate(operator, currentNums[index], currentNums[index + 1]);
         const roundToPlaces = 1000000000;
-        displayValue = Math.round((result + Number.EPSILON) * roundToPlaces) / roundToPlaces;
+        displayValue = (Math.round((result + Number.EPSILON) * roundToPlaces) / roundToPlaces).toString();
         updateDisplay(displayValue);
         currentNums.splice(index, 2, result);
         currentOperations.splice(index, 1);
@@ -117,6 +123,14 @@ function onEqualsClick(e) {
 function onClearClick(e) {
     clearData("");
     updateDisplay("0");
+}
+
+function onBackClick(e) {
+    if (!expectNewNum) {
+        displayValue = displayValue.slice(0, -1);
+        if (displayValue == "") updateDisplay("0");
+        else updateDisplay(displayValue);
+    }
 }
 
 let expectNewNum = true;
@@ -138,3 +152,9 @@ equalsBtn.addEventListener("click", onEqualsClick);
 
 const clearBtn = calculator.querySelector("#operators button#clear");
 clearBtn.addEventListener("click", onClearClick);
+
+const decimalBtn = calculator.querySelector("#num-pad button#decimal");
+decimalBtn.addEventListener("click", onDecimalClick);
+
+const backBtn = calculator.querySelector("#operators button#back");
+backBtn.addEventListener("click", onBackClick);
