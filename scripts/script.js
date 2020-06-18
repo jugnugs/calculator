@@ -62,19 +62,18 @@ function onNumClick(e) {
     if (expectNewNum) {
         displayValue = e.target.textContent;
         expectNewNum = false;
-    }
-    else displayValue += e.target.textContent;
+    } else displayValue += e.target.textContent;
     updateDisplay(displayValue);
 }
 
 function onOperatorClick(e) {
     // return if user tries to enter operator first
-    if (displayValue === "") {
-        return;
-    } 
-    pushOperand(displayValue);
-    currentOperations.push(e.target.textContent);
-    expectNewNum = true;
+    if (displayValue === "") return;
+    else if (!expectNewNum) {
+        pushOperand(displayValue);
+        currentOperations.push(e.target.textContent);
+        expectNewNum = true;
+    }
 }
 
 function onEqualsClick(e) {
