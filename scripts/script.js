@@ -54,34 +54,31 @@ function checkAS(operator) {
     return operator === "+" || operator === "-";
 }
 
-function pushLastOperand() {
-    let lastOperationIndex = displayValue.indexOf(currentOperations[currentOperations.length - 1]);
-    let lastOperand = parseFloat(displayValue.slice(lastOperationIndex + 1));
-    currentNums.push(lastOperand);
+function pushOperand(operand) {
+    currentNums.push(parseFloat(operand));
 }
 
 function onNumClick(e) {
-    displayValue += e.target.textContent;
+    if (expectNewNum) {
+        displayValue = e.target.textContent;
+        expectNewNum = false;
+    }
+    else displayValue += e.target.textContent;
     updateDisplay(displayValue);
 }
 
 function onOperatorClick(e) {
-    let operand = displayValue;
     // return if user tries to enter operator first
-    if (operand === "") {
+    if (displayValue === "") {
         return;
-    } else if (currentOperations.length > 0) {
-        pushLastOperand();
-    } else {
-        currentNums.push(parseFloat(operand));
-    }
+    } 
+    pushOperand(displayValue);
     currentOperations.push(e.target.textContent);
-    displayValue += e.target.textContent;
-    updateDisplay(displayValue);
+    expectNewNum = true;
 }
 
 function onEqualsClick(e) {
-    pushLastOperand();
+    pushOperand(displayValue);
     // check to make sure all numbers/operators are
     // entered
     if (isNaN(currentNums[currentNums.length - 1]) || 
@@ -123,6 +120,7 @@ function onClearClick(e) {
     updateDisplay("0");
 }
 
+let expectNewNum = true;
 let currentNums = [];
 let currentOperations = [];
 let displayValue = "";
