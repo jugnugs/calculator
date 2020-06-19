@@ -128,7 +128,10 @@ function onClearClick(e) {
 function onBackClick(e) {
     if (!expectNewNum) {
         displayValue = displayValue.slice(0, -1);
-        if (displayValue == "") updateDisplay("0");
+        if (displayValue == "") {
+            updateDisplay("0");
+            expectNewNum = true;
+        }
         else updateDisplay(displayValue);
     }
 }
