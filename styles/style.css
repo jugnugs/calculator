@@ -1,21 +1,26 @@
 body {
     font-family: 'Courier New', Courier, monospace;
+    color: #333333;
 }
 
 .center {
+    top: 0;
+    left: 0;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    min-width: 100vh;
+    justify-content: center;
     height: auto;
 }
 
 #calculator {
+    position: relative;
+    top: 20vh;
     display: flex;
     flex-direction: column;
+    background-color: #666666;
     width: 500px;
-    height: 500px;
+    height: fit-content;
+    padding: 1em;
+    border: 5px ridge #333333;
     justify-content: center;
     align-content: space-around;
     
@@ -23,16 +28,21 @@ body {
 
 #display-digits {
     text-align: right;
+    padding: 0.1em 0.2em 0.1em 0.2em;
     font-size: 70px;
-    line-height: 100px;
-    background-color: yellowgreen;
+    line-height: 1em;
+    background-color: #EEEEEE;
+    border: 1px solid #666666;
     overflow: hidden;
+    margin: 0 0 0.1em 0;
 }
 
 #button-pad {
     display: flex;
     flex-flow: row nowrap;
-    background-color: violet;
+    padding: 0.2em;
+    background-color: #CCCCCC;
+    border: 1px solid #666666;
 }
 
 #num-pad {
@@ -48,7 +58,7 @@ body {
 
 #operators {
     display: flex;
-    width: 15%;
+    width: 20%;
     height: 300px;
     flex-flow: column nowrap;
     justify-items: stretch;
@@ -56,7 +66,16 @@ body {
 }
 
 .button {
+    font-family: monospace, Courier;
     font-size: 2em;
+    background-color: #EEEEEE;
+    border: 1px solid #666666;
+    color: #333333;
+    margin: 2px;
+}
+
+.button:focus {
+    outline: 1px ridge #666666;
 }
 
 #operators .button {
