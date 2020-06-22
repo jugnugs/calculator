@@ -111,7 +111,7 @@ function onEqualsClick(e) {
             return;
         }
         result = operate(operator, currentNums[index], currentNums[index + 1]);
-        const roundToPlaces = 1000000000;
+        const roundToPlaces = 100000000;
         displayValue = (Math.round((result + Number.EPSILON) * roundToPlaces) / roundToPlaces).toString();
         updateDisplay(displayValue);
         currentNums.splice(index, 2, result);
