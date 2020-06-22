@@ -2,7 +2,7 @@
 
 [View the live application](https://jugnugs.github.io/calculator/)
 
-A simple web application that can perform strings of 
+A simple website that can perform strings of 
 simple arithmetic. Supports decimal input.
 
 ## to-do 
