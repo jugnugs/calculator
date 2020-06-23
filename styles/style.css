@@ -6,7 +6,8 @@ body {
 
 .center {
     position: absolute;
-    top: 20vh;
+    top: 50vh;
+    bottom: 50vh;
     left: 0;
     width: 100%;
     display: flex;
