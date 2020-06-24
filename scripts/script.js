@@ -59,22 +59,32 @@ function pushOperand(operand) {
 }
 
 function onNumClick(e) {
+    numKeyEvent(this);
+}
+
+function numKeyEvent(key) {
     if (expectNewNum) {
-        displayValue = e.target.textContent;
+        displayValue = key.textContent;
         expectNewNum = false;
-    } else displayValue += e.target.textContent;
+    } else displayValue += key.textContent;
     updateDisplay(displayValue);
 }
 
 function onOperatorClick(e) {
+    operatorKeyEvent(this);
+}
+
+function operatorKeyEvent(key) {
     // return if user tries to enter operator first
     if (displayValue === "") return;
     else if (!expectNewNum) {
         pushOperand(displayValue);
-        currentOperations.push(e.target.textContent);
+        let operator = key.textContent;
+        currentOperations.push(operator);
         expectNewNum = true;
     }
 }
+
 
 function onDecimalClick(e) {
     if (expectNewNum || displayValue.includes(".")) return;
@@ -161,3 +171,28 @@ decimalBtn.addEventListener("click", onDecimalClick);
 
 const backBtn = calculator.querySelector("#operators button#back");
 backBtn.addEventListener("click", onBackClick);
+
+document.addEventListener("keydown", (e) => {
+    const key = e.key;
+    numberBtns.forEach((numberBtn) => {
+        if (key === numberBtn.textContent) {
+            numKeyEvent(numberBtn);
+            return;
+        }
+    });
+    operatorBtns.forEach((operatorBtn) => {
+        if (key === operatorBtn.textContent) {
+            operatorKeyEvent(operatorBtn);
+            return;
+        } else if (key === "*" && 
+        operatorBtn.textContent === "×") {
+            operatorKeyEvent(operatorBtn);
+            return;
+        } else if (key === "/" &&
+        operatorBtn.textContent === "÷") {
+            operatorKeyEvent(operatorBtn);
+            return;
+        }
+    });
+
+});
