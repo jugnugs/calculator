@@ -58,7 +58,7 @@ function pushOperand(operand) {
     currentNums.push(parseFloat(operand));
 }
 
-function onNumClick(e) {
+function onNumClick() {
     numKeyEvent(this);
 }
 
@@ -70,7 +70,7 @@ function numKeyEvent(key) {
     updateDisplay(displayValue);
 }
 
-function onOperatorClick(e) {
+function onOperatorClick() {
     operatorKeyEvent(this);
 }
 
@@ -86,13 +86,13 @@ function operatorKeyEvent(key) {
 }
 
 
-function onDecimalClick(e) {
+function decimalKeyEvent() {
     if (expectNewNum || displayValue.includes(".")) return;
-    displayValue += e.target.textContent;
+    displayValue += ".";
     updateDisplay(displayValue);
 }
 
-function onEqualsClick(e) {
+function equalsKeyEvent() {
     pushOperand(displayValue);
     // check to make sure all numbers/operators are
     // entered
@@ -130,12 +130,12 @@ function onEqualsClick(e) {
     clearData(displayValue);
 }
 
-function onClearClick(e) {
+function clearKeyEvent() {
     clearData("");
     updateDisplay("0");
 }
 
-function onBackClick(e) {
+function backKeyEvent() {
     if (!expectNewNum) {
         displayValue = displayValue.slice(0, -1);
         if (displayValue == "") {
@@ -161,16 +161,16 @@ const operatorBtns = Array.from(calculator.querySelectorAll("#operators button.o
 operatorBtns.forEach(btn => btn.addEventListener("click", onOperatorClick));
 
 const equalsBtn = calculator.querySelector("#num-pad button#equals");
-equalsBtn.addEventListener("click", onEqualsClick);
+equalsBtn.addEventListener("click", equalsKeyEvent);
 
 const clearBtn = calculator.querySelector("#operators button#clear");
-clearBtn.addEventListener("click", onClearClick);
+clearBtn.addEventListener("click", clearKeyEvent);
 
 const decimalBtn = calculator.querySelector("#num-pad button#decimal");
-decimalBtn.addEventListener("click", onDecimalClick);
+decimalBtn.addEventListener("click", decimalKeyEvent);
 
 const backBtn = calculator.querySelector("#operators button#back");
-backBtn.addEventListener("click", onBackClick);
+backBtn.addEventListener("click", backKeyEvent);
 
 document.addEventListener("keydown", (e) => {
     const key = e.key;
@@ -194,5 +194,18 @@ document.addEventListener("keydown", (e) => {
             return;
         }
     });
+
+    if (key === "=" || key === "Enter") {
+        equalsKeyEvent();
+        return;
+    } else if (key === ".") {
+        decimalKeyEvent();
+        return;
+    } else if (key === "c" || key === "C") {
+        clearKeyEvent();
+        return;
+    } else if (key === "Backspace") {
+        backKeyEvent();
+    }
 
 });
